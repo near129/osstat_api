@@ -18,13 +18,14 @@
         const data = await res.json();
         return data;
     }
-    (function () {
-        setInterval(async function () {
-            console.log("start");
+    async function fetchAPI () {
             const [cpu, memory] = await Promise.all([getResponse("/cpu"), getResponse("/memory")]);
             document.getElementById("cpu_usage").innerHTML = (100 - parseFloat(cpu.cpu_idle)).toFixed(2) + "%";
             document.getElementById("memory_usage").innerHTML = (parseFloat(memory.memory_used)).toFixed(2) + " / " + (parseFloat(memory.memory_total)).toFixed(2) + "GB";
-        }, 2000);
+        }
+    fetchAPI();
+    (function () {
+        setInterval(fetchAPI, 2000);
     })();
 </script>
 
