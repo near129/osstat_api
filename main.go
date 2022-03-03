@@ -13,11 +13,14 @@ var GB = float32(1 << 30)
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
-
+	r.LoadHTMLGlob("templates/*.html")
 	r.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})
 
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", nil)
+	})
 	r.GET("/memory", func(c *gin.Context) {
 		memory, err := memory.Get()
 		if err != nil {
@@ -46,9 +49,9 @@ func setupRouter() *gin.Engine {
 		}
 		total := float64(after.Total - before.Total)
 		c.JSON(http.StatusOK, gin.H{
-			"cpu user":   float64(after.User-before.User) / total * 100,
-			"cpu system": float64(after.System-before.System) / total * 100,
-			"cpu idle":   float64(after.Idle-before.Idle) / total * 100,
+			"cpu_user":   float64(after.User-before.User) / total * 100,
+			"cpu_system": float64(after.System-before.System) / total * 100,
+			"cpu_idle":   float64(after.Idle-before.Idle) / total * 100,
 		})
 	})
 
